@@ -1,5 +1,20 @@
 export const Recipes = new Mongo.Collection('recipes')
 
+Recipes.allow({
+    insert:function (userId, doc) {
+        return !!userId // user id exist
+    }
+})
+
+const Ingredient = new SimpleSchema({
+    name:{
+        type: String,
+    },
+    amount:{
+        type: String,
+    }
+})
+
 const RecipeSchema = new SimpleSchema({
     name: {
         type: String,
@@ -8,6 +23,17 @@ const RecipeSchema = new SimpleSchema({
     desc:{
         type: String,
         label: 'Description'
+    },
+    ingredients:{
+      type:[Ingredient]
+    },
+    inMenu:{
+      type:Boolean,
+      defaultValue:false,
+      optional: true,
+        autoform:{
+          type:'hidden'
+        }
     },
     author: {
         type:String,
@@ -32,4 +58,5 @@ const RecipeSchema = new SimpleSchema({
 })
 
 Recipes.attachSchema(RecipeSchema)
+// Recipes.attachSchema(Ingredient)
 
